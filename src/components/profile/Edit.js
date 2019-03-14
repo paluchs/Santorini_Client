@@ -19,7 +19,7 @@ const Form = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 60%;
-  height: 375px;
+  height: 400px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
@@ -179,6 +179,16 @@ class Edit extends React.Component {
                                 }}
                             >
                                 Change data
+                            </Button>
+                        </ButtonContainer>
+                        <ButtonContainer>
+                            <Button
+                                width="50%"
+                                onClick={() => {
+                                    this.props.history.push(`/game`)
+                                }}
+                            >
+                                Back to profiles
                             </Button>
                         </ButtonContainer>
                     </Form>
