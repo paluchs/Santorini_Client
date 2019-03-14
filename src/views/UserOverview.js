@@ -2,29 +2,33 @@ import React from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
-  &:hover {
-    transform: translateY(-2px);
-  }
   margin: 6px 0;
   width: 280px;
   padding: 10px;
   border-radius: 6px;
-  display: flex;
+  display: table-row;
   align-items: normal;
   border: 1px solid rgba(135,135,135,0.15);
 `;
 
 const UserName = styled.div`
+  font-size: 30px;
   font-weight: bold;
   color: #7ccfff;
   margin-left: 5px;
 `;
 
-const Id = styled.div`
+const Status = styled.div`
   font-weight: lighter;
   margin-left: 5px;
+  color: #373737;
 `;
 
+const General = styled.div`
+  font-weight: lighter;
+  margin-left: 5px;
+  color: #373737;
+`;
 
 
 /**
@@ -35,12 +39,17 @@ const Id = styled.div`
  * https://reactjs.org/docs/components-and-props.html
  * @FunctionalComponent
  */
-const Player = ({ user }) => {
+const UserOverview = ({ user }) => {
     return (
         <Container>
-            <UserName>{user.username}</UserName> <Id>Id: {user.id}</Id>
+            <UserName>{user.username}</UserName>
+            <General>Name: {user.name}</General>
+            <Status>Status: {user.status}</Status>
+            <General>Birthday: {user.birthdayDate}</General>
+            <General>Creation date: {user.creationDate}</General>
+
         </Container>
     );
 };
 
-export default Player;
+export default UserOverview;

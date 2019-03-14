@@ -14,11 +14,12 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  background: rgba(255,255,255);
 `;
 
 const Title = styled.h1`
   font-weight: bold;
-  color: white;
+  color: black;
   text-align: center;
 `;
 /**
@@ -32,7 +33,7 @@ const Title = styled.h1`
 const Header = props => {
   return (
     <Container height={props.height}>
-      <Title>SoPra FS19 rocks with React!</Title>
+      <Title>Santorini Web App</Title>
       <ReactLogo width={60} height={60} />
     </Container>
   );

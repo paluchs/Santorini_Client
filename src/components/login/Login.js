@@ -26,13 +26,13 @@ const Form = styled.div`
   padding-left: 37px;
   padding-right: 37px;
   border-radius: 5px;
-  background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
+  background: linear-gradient(rgb(229,253,255), rgb(220,245,255));
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
 
 const InputField = styled.input`
   &::placeholder {
-    color: rgba(255, 255, 255, 0.2);
+    color: rgb(55,55,55);
   }
   height: 35px;
   padding-left: 15px;
@@ -40,12 +40,12 @@ const InputField = styled.input`
   border: none;
   border-radius: 20px;
   margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
+  background: rgb(255,255,255);
+  color: #373737;
 `;
 
 const Label = styled.label`
-  color: white;
+  color: rgba(0,0,0,1);
   margin-bottom: 10px;
   text-transform: uppercase;
 `;
@@ -75,33 +75,52 @@ class Login extends React.Component {
   constructor() {
     super();
     this.state = {
-      name: null,
-      username: null
+      username: null,
+      password: null
     };
   }
+
+    goToRegister() {
+        this.props.history.push('/register')
+    }
   /**
    * HTTP POST request is sent to the backend.
    * If the request is successful, a new user is returned to the front-end and its token is stored in the localStorage.
    */
   login() {
-    fetch(`${getDomain()}/users`, {
+    fetch(`${getDomain()}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
         username: this.state.username,
-        name: this.state.name
+        password: this.state.password
       })
     })
-      .then(response => response.json())
-      .then(returnedUser => {
-        const user = new User(returnedUser);
-        // store the token into the local storage
-        localStorage.setItem("token", user.token);
-        // user login successfully worked --> navigate to the route /game in the GameRouter
-        this.props.history.push(`/game`);
-      })
+        .then(response => {
+          if (response.status === 404) {
+            alert("This username does not exist");
+            this.props.history.push(`/register`);
+          }
+          else if (response.status === 400) {
+              alert("Wrong password, try again!");
+              this.props.history.push(`/login`);
+          }
+          else {
+            response.json()
+                .then(returnedUser => {
+                      const user = new User(returnedUser);
+                      // store the token into the local storage
+                      localStorage.setItem("token", user.token);
+                      // store the id into the local storage
+                      localStorage.setItem("id", user.id);
+                      // login successfully worked --> navigate to the route /game in the GameRouter
+                      this.props.history.push(`/game`);
+                    }
+                )
+          }
+        })
       .catch(err => {
         if (err.message.match(/Failed to fetch/)) {
           alert("The server cannot be reached. Did you start it?");
@@ -143,16 +162,17 @@ class Login extends React.Component {
                 this.handleInputChange("username", e.target.value);
               }}
             />
-            <Label>Name</Label>
+            <Label>Password</Label>
             <InputField
               placeholder="Enter here.."
+              type = "password"
               onChange={e => {
-                this.handleInputChange("name", e.target.value);
+                this.handleInputChange("password", e.target.value);
               }}
             />
             <ButtonContainer>
               <Button
-                disabled={!this.state.username || !this.state.name}
+                disabled={!this.state.username || !this.state.password}
                 width="50%"
                 onClick={() => {
                   this.login();
@@ -161,6 +181,16 @@ class Login extends React.Component {
                 Login
               </Button>
             </ButtonContainer>
+              <ButtonContainer>
+                  <Button
+                      width="50%"
+                      onClick={() => {
+                          this.goToRegister();
+                      }}
+                  >
+                      Not yet registered?
+                  </Button>
+              </ButtonContainer>
           </Form>
         </FormContainer>
       </BaseContainer>
